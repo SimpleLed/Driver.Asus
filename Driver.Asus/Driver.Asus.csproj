@@ -68,7 +68,7 @@
     <EmbeddedResource Include="ProductImages\Projector.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AsusPlaceholder.png" />
+    <EmbeddedResource Include="AsusPlaceholder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

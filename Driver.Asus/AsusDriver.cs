@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using MadLedFrameworkSDK;
 using AuraServiceLib;
 using System.Drawing;
+using System.Reflection;
+using System.IO;
 
 namespace Driver.Asus
 {
@@ -228,12 +230,12 @@ namespace Driver.Asus
 
             try
             {
-                Stream imageStream = myAssembly.GetManifestResourceStream("AsusDriver.ProductImages." + image + ".png");
+                Stream imageStream = myAssembly.GetManifestResourceStream("Driver.Asus.ProductImages." + image + ".png");
                 return (Bitmap)Image.FromStream(imageStream);
             }
             catch
             {
-                Stream placeholder = myAssembly.GetManifestResourceStream("AsusDriver.AsusPlaceholder.png");
+                Stream placeholder = myAssembly.GetManifestResourceStream("Driver.Asus.AsusPlaceholder.png");
                 return (Bitmap)Image.FromStream(placeholder);
             }
         }
