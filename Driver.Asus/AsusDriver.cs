@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MadLedFrameworkSDK;
+using SimpleLed;
 using AuraServiceLib;
 using System.Drawing;
 using System.Reflection;
@@ -11,7 +9,7 @@ using System.IO;
 
 namespace Driver.Asus
 {
-    public class AsusDriver : ISimpleLEDDriver
+    public class AsusDriver : ISimpleLed
     {
         private IAuraSdk2 _sdk;
 
@@ -150,7 +148,6 @@ namespace Driver.Asus
                 }
 
             }
-
 
 
             return devices;
