@@ -173,7 +173,12 @@ namespace Driver.Asus
                 SupportsPush = true,
                 IsSource = false,
                 Id = Guid.Parse("bcc35bad-d1ee-4303-a74f-5fa2d381e0af"),
-                SupportsCustomConfig = false
+                SupportsCustomConfig = false,
+                Author = "Fanman03",
+                Blurb = "Support for Asus devices",
+                CurrentVersion = new ReleaseNumber(1,0,0,0),
+                GitHubLink = "https://github.com/SimpleLed/Driver.Asus",
+                IsPublicRelease = true
             };
         }
 
