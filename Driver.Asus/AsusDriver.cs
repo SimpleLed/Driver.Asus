@@ -101,6 +101,7 @@ namespace Driver.Asus
                         case 0x00081001: //Notebook Keyboard(4 - zone type)
                             ctrlDevice.DeviceType = DeviceTypes.Keyboard;
                             ctrlDevice.ProductImage = GetImage("LaptopKeyboard");
+                            ctrlDevice.Name = device.Name.Replace("NotebookKeyboard", "Laptop Keyboard");
                             break;
 
                         case 0x00090000: //Mouse
