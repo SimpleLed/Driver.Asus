@@ -176,8 +176,8 @@ namespace Driver.Asus
                 Id = Guid.Parse("bcc35bad-d1ee-4303-a74f-5fa2d381e0af"),
                 SupportsCustomConfig = false,
                 Author = "Fanman03",
-                Blurb = "Support for Asus devices",
-                CurrentVersion = new ReleaseNumber(1,0,0,0),
+                Blurb = "Support for Asus Aura devices.",
+                CurrentVersion = new ReleaseNumber(1,0,0,1),
                 GitHubLink = "https://github.com/SimpleLed/Driver.Asus",
                 IsPublicRelease = true
             };
@@ -194,6 +194,9 @@ namespace Driver.Asus
         }
 
         public static bool ApiInUse = false;
+
+        public event EventHandler DeviceRescanRequired;
+
         public void Push(ControlDevice controlDevice)
         {
             if (ApiInUse) return;
