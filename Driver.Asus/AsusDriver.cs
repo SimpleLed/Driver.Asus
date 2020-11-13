@@ -11,6 +11,14 @@ namespace Driver.Asus
 {
     public class AsusDriver : ISimpleLed
     {
+        public event Events.DeviceChangeEventHandler DeviceAdded;
+        public event Events.DeviceChangeEventHandler DeviceRemoved;
+
+        public void InterestedUSBChange(int VID, int PID, bool connected)
+        {
+            throw new NotImplementedException();
+        }
+
         private IAuraSdk2 _sdk;
 
         public IAuraSyncDeviceCollection _collection;
@@ -20,6 +28,12 @@ namespace Driver.Asus
             _sdk = (IAuraSdk2)new AuraSdk();
             _sdk.SwitchMode();
             _collection = _sdk.Enumerate(0);
+
+            var drivers = GetDevices();
+            foreach (ControlDevice controlDevice in drivers)
+            {
+                DeviceAdded?.Invoke(this, new Events.DeviceChangeEventArgs(controlDevice));
+            }
         }
 
         public List<ControlDevice> GetDevices()
@@ -177,7 +191,7 @@ namespace Driver.Asus
                 SupportsCustomConfig = false,
                 Author = "Fanman03",
                 Blurb = "Support for Asus Aura devices.",
-                CurrentVersion = new ReleaseNumber(1,0,0,1),
+                CurrentVersion = new ReleaseNumber(1,0,1,0),
                 GitHubLink = "https://github.com/SimpleLed/Driver.Asus",
                 IsPublicRelease = true
             };
