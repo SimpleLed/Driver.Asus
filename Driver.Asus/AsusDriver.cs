@@ -191,7 +191,7 @@ namespace Driver.Asus
                 SupportsCustomConfig = false,
                 Author = "Fanman03",
                 Blurb = "Support for Asus Aura devices.",
-                CurrentVersion = new ReleaseNumber(1,0,1,0),
+                CurrentVersion = new ReleaseNumber(1,0,1,1),
                 GitHubLink = "https://github.com/SimpleLed/Driver.Asus",
                 IsPublicRelease = true
             };
@@ -258,6 +258,10 @@ namespace Driver.Asus
                 Stream placeholder = myAssembly.GetManifestResourceStream("Driver.Asus.AsusPlaceholder.png");
                 return (Bitmap)Image.FromStream(placeholder);
             }
+        }
+
+        public void SetColorProfile(ColorProfile value)
+        {
         }
     }
 }
