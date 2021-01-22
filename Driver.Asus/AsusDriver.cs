@@ -180,6 +180,38 @@ namespace Driver.Asus
             return null;
         }
 
+        public void SetDeviceOverride(ControlDevice controlDevice, CustomDeviceSpecification deviceSpec)
+        {
+            controlDevice.LEDs = new ControlDevice.LedUnit[deviceSpec.LedCount];
+
+            for (int p = 0; p < deviceSpec.LedCount; p++)
+            {
+                controlDevice.LEDs[p] = new ControlDevice.LedUnit
+                {
+                    Data = new ControlDevice.LEDData
+                    {
+                        LEDNumber = p
+                    },
+                    LEDName = "LED " + (p + 1),
+                    Color = new LEDColor(0, 0, 0)
+                };
+            }
+
+            controlDevice.CustomDeviceSpecification = deviceSpec;
+        }
+
+        public List<CustomDeviceSpecification> GetCustomDeviceSpecifications()
+        {
+            CustomDeviceSpecification testSpecification = new CustomDeviceSpecification();
+            testSpecification.LedCount = 30;
+            testSpecification.Name = "Generic 30 LED RGB Strip";
+            testSpecification.MadeByName = "Fanman03";
+
+            List<CustomDeviceSpecification> specsList = new List<CustomDeviceSpecification>();
+            specsList.Add(testSpecification);
+            return specsList;
+        }
+
         public DriverProperties GetProperties()
         {
             return new DriverProperties
@@ -191,9 +223,12 @@ namespace Driver.Asus
                 SupportsCustomConfig = false,
                 Author = "Fanman03",
                 Blurb = "Support for Asus Aura devices.",
-                CurrentVersion = new ReleaseNumber(1,0,1,1),
+                CurrentVersion = new ReleaseNumber(1,0,1,2),
                 GitHubLink = "https://github.com/SimpleLed/Driver.Asus",
-                IsPublicRelease = true
+                IsPublicRelease = true,
+                OverrideSupport = OverrideSupport.All,
+                SetDeviceOverride = SetDeviceOverride,
+                DeviceSpecifications = GetCustomDeviceSpecifications(),
             };
         }
 
