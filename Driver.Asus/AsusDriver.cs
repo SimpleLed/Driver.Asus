@@ -6,6 +6,7 @@ using AuraServiceLib;
 using System.Drawing;
 using System.Reflection;
 using System.IO;
+using System.Management;
 
 namespace Driver.Asus
 {
@@ -13,6 +14,47 @@ namespace Driver.Asus
     {
         public event Events.DeviceChangeEventHandler DeviceAdded;
         public event Events.DeviceChangeEventHandler DeviceRemoved;
+
+        private static ManagementObjectSearcher baseboardSearcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
+        private static ManagementObjectSearcher gpuSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController");
+
+        public static string MBProduct
+        {
+            get
+            {
+                try
+                {
+                    foreach (ManagementObject queryObj in baseboardSearcher.Get())
+                    {
+                        return queryObj["Product"].ToString();
+                    }
+                    return "";
+                }
+                catch (Exception e)
+                {
+                    return "";
+                }
+            }
+        }
+
+        public static string GPUProduct
+        {
+            get
+            {
+                try
+                {
+                    foreach (ManagementObject queryObj in gpuSearcher.Get())
+                    {
+                        return queryObj["Name"].ToString();
+                    }
+                    return "";
+                }
+                catch (Exception e)
+                {
+                    return "";
+                }
+            }
+        }
 
         public void InterestedUSBChange(int VID, int PID, bool connected)
         {
@@ -81,19 +123,34 @@ namespace Driver.Asus
                         case 0x00010000: //Motherboard
                             ctrlDevice.DeviceType = DeviceTypes.MotherBoard;
                             ctrlDevice.ProductImage = GetImage("Motherboard");
-                            ctrlDevice.Name = "Motherboard";
+                            if (MBProduct == null)
+                            {
+                                ctrlDevice.Name = "Motherboard";
+                            }
+                            else
+                            {
+                                ctrlDevice.Name = MBProduct;
+                            }
                             break;
 
                         case 0x00011000: //Motherboard LED Strip
                             ctrlDevice.DeviceType = DeviceTypes.LedStrip;
                             ctrlDevice.ProductImage = GetImage("AddressableHeader");
-                            ctrlDevice.Name = device.Name.Replace("AddressableHeader", "ARGB Header");
+                            ctrlDevice.Name = device.Name.Replace("AddressableStrip", "ARGB Header");
+                            ctrlDevice.OverrideSupport = OverrideSupport.All;
                             break;
 
                         case 0x00020000: //VGA
                             ctrlDevice.DeviceType = DeviceTypes.GPU;
                             ctrlDevice.ProductImage = GetImage("GPU");
-                            ctrlDevice.Name = device.Name.Replace("Vga", "GPU");
+                            if (MBProduct == null)
+                            {
+                                ctrlDevice.Name = device.Name.Replace("Vga", "GPU");
+                            }
+                            else
+                            {
+                                ctrlDevice.Name = GPUProduct;
+                            }
                             break;
 
                         case 0x00040000: //Headset
@@ -202,13 +259,7 @@ namespace Driver.Asus
 
         public List<CustomDeviceSpecification> GetCustomDeviceSpecifications()
         {
-            CustomDeviceSpecification testSpecification = new CustomDeviceSpecification();
-            testSpecification.LedCount = 30;
-            testSpecification.Name = "Generic 30 LED RGB Strip";
-            testSpecification.MadeByName = "Fanman03";
-
             List<CustomDeviceSpecification> specsList = new List<CustomDeviceSpecification>();
-            specsList.Add(testSpecification);
             return specsList;
         }
 
@@ -223,12 +274,11 @@ namespace Driver.Asus
                 SupportsCustomConfig = false,
                 Author = "Fanman03",
                 Blurb = "Support for Asus Aura devices.",
-                CurrentVersion = new ReleaseNumber(1,0,1,2),
+                CurrentVersion = new ReleaseNumber(1, 0, 2, AutoRevision.BuildRev.BuildRevision),
                 GitHubLink = "https://github.com/SimpleLed/Driver.Asus",
                 IsPublicRelease = true,
-                OverrideSupport = OverrideSupport.All,
                 SetDeviceOverride = SetDeviceOverride,
-                DeviceSpecifications = GetCustomDeviceSpecifications(),
+                GetCustomDeviceSpecifications = GetCustomDeviceSpecifications
             };
         }
 
